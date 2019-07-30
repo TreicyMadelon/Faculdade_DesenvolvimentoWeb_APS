@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="UTF-8">
+ <link rel="stylesheet" href="css/estilo.css">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ 
+ <script type="text/javascript"  src="js/core.js"></script>
+ <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+<body>
+    <section class="intro">
+        <div class="agenda">
+                <div  class="container">
+                    <table id="table" border="1"  width="530">
+                           
+                            <thead align="center"   width="520">
+                        <tr>
+                            <th> Nome </th>
+                            <th> Sobrenome </th>
+                            <th> Cidade </th>
+                            <th> <i class="fa fa-star" style="font-size:24px"></i> </th>
+                        </tr>
+                            </thead>
+                <tbody>
+                        <tr>
+                            <td>Josh</td>
+                            <td>Malerman</td>
+                            <td>São Paulo</td>
+                            <th> <a onclick="myFunction();" class="favme fa fa-star" style="font-size:24px"></a>  </th> 
+                                    
+                                
+                        </tr>
+                        <tr>
+                            <td>Carina</td>
+                            <td>Rissi</td>
+                            <td>Rio de Janeiro</td>
+                            <th> <a onclick="myFunction();" class="favme fa fa-star" style="font-size:24px"></a> </th>
+                            </tr>
+                        <tr>
+                            <td>Collen</td>
+                            <td>Hoover</td>
+                            <td>Curitiba</td>
+                            <th> <a onclick="myFunction();" class="favme fa fa-star" style="font-size:24px"></a> </th>
+                        </tr>
+                    </table>
+                </tbody>
+           
+                </div>
+        <div class="tab tab-2" >
+            Nome: <input type="text" name="pnome" id="pnome" >
+            Sobrenome: <input type="text" name="snome" id="snome" >
+            Cidade: <input type="text" name="cidade" id="cidade" >
+            <button class="button" onclick="addHtmlTableRow();">Cadastrar</button>
+            <button class="button" onclick="editHtmlTbleSelectedRow();" >Alterar</button>
+            <button class="button" onclick="removeSelectedRow();" >Remover</button>
+            
+        </div>
+        
+        <div id='map'></div>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqTSbe7pSXTRGxNE1PNJ03Wm35HG7ynic&callback=initMap">
+        </script>
+    </section>
+<script>
+                 // Favorito
+                 function myFunction(){
+                            $(document).ready(function(){
+                                $("p").click(function(){
+                                    $(this).hide();
+                                });
+                            });
+                            
+                            $('.favme').click(function() {
+                                $(this).toggleClass('active');
+                            });
+                            
+                            /* quando o usuario clica, ativa is_animating*/
+                            $(".favme").on('click touchstart', function(){
+                              $(this).toggleClass('is_animating');
+                            });
+                            
+                            /*remove a classe quando a animacao acaba*/
+                            $(".favme").on('animationend', function(){
+                              $(this).toggleClass('is_animating');
+                            });
+                        }
+
+
+
+
+    var rIndex,
+                table = document.getElementById("table");
+                
+            
+            // verifica se nome, sobrenome ou cidade está vazia
+            function checkEmptyInput()
+            {
+                var isEmpty = false,
+                    pnome = document.getElementById("pnome").value,
+                    snome = document.getElementById("snome").value,
+                    cidade = document.getElementById("cidade").value;
+            
+                if(pnome === ""){
+                    alert("Primeiro nome não pode está vazio");
+                    isEmpty = true;
+                }
+                else if(snome === ""){
+                    alert("Sobrenome não pode está vazio");
+                    isEmpty = true;
+                }
+                else if(cidade === ""){
+                    alert("Cidade não pode está vazio");
+                    isEmpty = true;
+                }
+                return isEmpty;
+            }
+            
+            function addHtmlTableRow()
+            { 
+                // pegar table por id
+                // criar novas colunas e celular
+                // pegar valor do input
+                // seta os valores em colunas e celulas
+                if(!checkEmptyInput()){
+                   
+                var newRow = table.insertRow(table.length),
+                    cell1 = newRow.insertCell(0),
+                    cell2 = newRow.insertCell(1),
+                    cell3 = newRow.insertCell(2),
+                    cell4 = newRow.insertCell(3),
+                    pnome = document.getElementById("pnome").value,
+                    snome = document.getElementById("snome").value,
+                    estrela = '<th><a onclick="favme" class="favme fa fa-star" float="left" style="font-size:24px;margin-left:52px;""></a></th>',
+                    cidade = document.getElementById("cidade").value;
+
+                    
+                   
+            
+                cell1.innerHTML = pnome;
+                cell2.innerHTML = snome;
+                cell3.innerHTML = cidade;
+                cell4.innerHTML = estrela;
+                
+                selectedRowToInput();
+                myFunction();
+              
+            }
+            }
+            
+            // selecionar linha e incluir dados
+            function selectedRowToInput()
+            {
+               
+                for(var i = 1; i < table.rows.length; i++)
+                {
+                    table.rows[i].onclick = function()
+                    { myFunction();
+                      // pegar o index da linha selecionada
+                      rIndex = this.rowIndex;
+                      document.getElementById("pnome").value = this.cells[0].innerHTML;
+                      document.getElementById("snome").value = this.cells[1].innerHTML;
+                      document.getElementById("cidade").value = this.cells[2].innerHTML;
+                      
+                    };
+                }
+            }
+            selectedRowToInput();
+            
+            function editHtmlTbleSelectedRow()
+            {
+                var pnome = document.getElementById("pnome").value,
+                    snome = document.getElementById("snome").value,
+                    cidade = document.getElementById("cidade").value;
+               if(!checkEmptyInput()){
+                table.rows[rIndex].cells[0].innerHTML = pnome;
+                table.rows[rIndex].cells[1].innerHTML = snome;
+                table.rows[rIndex].cells[2].innerHTML = cidade;
+              }
+            }
+            
+            function removeSelectedRow()
+            {
+                table.deleteRow(rIndex);
+                // remover input
+                document.getElementById("pnome").value = " ";
+                document.getElementById("snome").value = " ";
+                document.getElementById("cidade").value = " ";
+            }
+
+                         
+                           
+
+
+</script>
+
+</body>
+</html>
+
